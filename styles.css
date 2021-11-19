@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.display {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    background-color: #FCFCFC;
+    height: 60px;
+    width: 200px;
+    padding: 10px;
+}
+
+.display div {
+    font-size: 24px;
+}
+
+.buttons {
+    display: flex;
+}
+
+button {
+    height: 50px;
+    width: 50px;
+    font-size: 16px;
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    background-color: white;
+}
