@@ -19,6 +19,10 @@ function makeOperation(a, operator) {
 
 // button elements
 const numbers = document.querySelectorAll(".number");
+const operators = document.querySelectorAll(".operator")
+const clearEntry = document.querySelector("#CE")
+const clear = document.querySelector("#C")
+const backspace = document.querySelector("#BACK")
 const negative = document.querySelector("#NEG");
 const decimal = document.querySelector("#DECI");
 
