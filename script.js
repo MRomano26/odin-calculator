@@ -72,6 +72,7 @@ function makeOperation(a, operator) {
 function equalOperator() {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
+    let signDisplay = document.querySelector(".signDisplay");
 
     if (operation === null || operatorPressed) {
         // should only work when there is a second value
@@ -92,12 +93,19 @@ function equalOperator() {
         let resultArray = result.toString().split("")
         if (resultArray.length > displayNumbers.length) {
             // too big
+            console.log("too big")
         }
         else {
+            if (resultArray[0] === "-") {
+                signDisplay.textContent = resultArray.shift();
+                displayValue[0] = "-";
+            }
             for (let i = 0; i < displayNumbers.length; i++) {
                 displayNumbers[i].textContent = resultArray[i];
-                operation = null;
+                displayValue.push(resultArray[i]);
             }
+            operation = null;
+            operatorPressed = true;
         }
     }
 }
