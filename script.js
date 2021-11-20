@@ -1,20 +1,15 @@
-let add = (a, b) => a + b;
-let subtract = (a, b) => a - b;
-let multiply = (a, b) => a * b;
-let divide = (a, b) => a / b;
-
-function operate(a, b, operator) {
+function makeOperation(a, operator) {
     if (operator === "+") {
-        return add(a, b);
+        return b => a + b;
     }
     else if (operator === "-") {
-        return subtract(a, b);
+        return b => a - b;
     }
     else if (operator === "*") {
-        return multiply(a, b);
+        return b => a * b;
     }
     else if (operator === "/") {
-        return divide(a, b);
+        return b => a / b;
     }
     else {
         return;
@@ -24,10 +19,11 @@ function operate(a, b, operator) {
 
 // button elements
 const numbers = document.querySelectorAll(".number");
-const negative = document.querySelector("#NEG")
-const decimal = document.querySelector("#DECI")
+const negative = document.querySelector("#NEG");
+const decimal = document.querySelector("#DECI");
 
-let displayValue = [""]
+let displayValue = [""];
+let operation = null;
 
 
 // event listeners added
