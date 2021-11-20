@@ -6,6 +6,7 @@ const clear = document.querySelector("#C")
 const backspace = document.querySelector("#BACK")
 const negative = document.querySelector("#NEG");
 const decimal = document.querySelector("#DECI");
+const equal = document.querySelector("#EQUA");
 
 // global variables
 let displayValue = [""];
@@ -29,22 +30,24 @@ operators.forEach(operator => {
             operation = makeOperation(Number(displayValue.join("")), id);
         }
         else {
-            // maybe i'll add something for multiply operators pressed
+            // maybe i'll add something for multiple operators pressed
             return;
         }
     })
 })
 
-clearEntry.addEventListener("click", clearDisplay)
+clearEntry.addEventListener("click", clearDisplay);
 
 clear.addEventListener("click", e => {
     operation = null;
     clearDisplay();
-})
+});
 
-negative.addEventListener("click", changeSign)
+negative.addEventListener("click", changeSign);
 
-decimal.addEventListener("click", addDecimalToDisplay)
+decimal.addEventListener("click", addDecimalToDisplay);
+
+equal.addEventListener("click", equalOperator);
 
 
 // event listener functions
@@ -66,6 +69,39 @@ function makeOperation(a, operator) {
     }
 }
 
+function equalOperator() {
+    let displayNumbers = document.querySelectorAll(".numberDisplay");
+    displayNumbers = Array.from(displayNumbers);
+
+    if (operation === null || operatorPressed) {
+        // should only work when there is a second value
+        return;
+    }
+    let secondNumber = Number(displayValue.join(""));
+    let result = operation(secondNumber);
+    clearDisplay();
+
+    if (isNaN(result)) {
+        return;
+    }
+    else if (!Number.isFinite(result)) {
+        displayNumbers[0].textContent = "Don't divide by zero!";
+        operatorPressed = true;
+    }
+    else {
+        let resultArray = result.toString().split("")
+        if (resultArray.length > displayNumbers.length) {
+            // too big
+        }
+        else {
+            for (let i = 0; i < displayNumbers.length; i++) {
+                displayNumbers[i].textContent = resultArray[i];
+                operation = null;
+            }
+        }
+    }
+}
+
 function addNumberToDisplay(id) {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
@@ -82,7 +118,7 @@ function addNumberToDisplay(id) {
             return;
         }
         displayNumbers[0].textContent = `${id}`;
-        displayValue.push(displayNumbers[0].textContent)
+        displayValue.push(displayNumbers[0].textContent);
         return console.log(displayValue.join(""));
     }
 
@@ -92,11 +128,11 @@ function addNumberToDisplay(id) {
         }
         else {
             displayNumbers[i].textContent = `${id}`;
-            displayValue.push(displayNumbers[i].textContent)
+            displayValue.push(displayNumbers[i].textContent);
             return console.log(displayValue.join(""));
         }
     }
-    return console.log(displayValue.join(""))
+    return console.log(displayValue.join(""));
 }
 
 function clearDisplay() {
