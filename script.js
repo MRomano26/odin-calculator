@@ -38,6 +38,20 @@ numbers.forEach((number) => {
     })
 })
 
+operators.forEach(operator => {
+    let id = operator.id;
+    operator.addEventListener("click", e => {
+        if (operation === null) {
+            operation = makeOperation(Number(displayValue.join("")), id);
+            clearDisplay();
+        }
+        else {
+            // maybe i'll add something for multiply operators pressed
+            return;
+        }
+    })
+})
+
 clearEntry.addEventListener("click", clearDisplay)
 
 clear.addEventListener("click", e => {
