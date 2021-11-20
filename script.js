@@ -30,12 +30,19 @@ let displayValue = [""];
 let operation = null;
 
 
-// event listeners added
+// event listeners
 numbers.forEach((number) => {
     let id = number.id;
     number.addEventListener("click", e => {
         addNumberToDisplay(id);
     })
+})
+
+clearEntry.addEventListener("click", clearDisplay)
+
+clear.addEventListener("click", e => {
+    operation = null;
+    clearDisplay();
 })
 
 negative.addEventListener("click", e => {
@@ -79,6 +86,18 @@ function addNumberToDisplay(id) {
         }
     }
     return console.log(displayValue.join(""))
+}
+
+function clearDisplay() {
+    displayValue = [""]
+    let signDisplay = document.querySelector(".signDisplay");
+    let displayNumbers = document.querySelectorAll(".numberDisplay");
+    displayNumbers = Array.from(displayNumbers);
+    signDisplay.textContent = "";
+    displayNumbers[0].textContent = "0";
+    for (let i = 1; i < displayNumbers.length; i++) {
+        displayNumbers[i].textContent = "";
+    }
 }
 
 function addDecimalToDisplay() {
