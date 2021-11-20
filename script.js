@@ -28,6 +28,7 @@ const decimal = document.querySelector("#DECI");
 
 let displayValue = [""];
 let operation = null;
+let operatorPressed = false;
 
 
 // event listeners
@@ -42,8 +43,8 @@ operators.forEach(operator => {
     let id = operator.id;
     operator.addEventListener("click", e => {
         if (operation === null) {
+            operatorPressed = true;
             operation = makeOperation(Number(displayValue.join("")), id);
-            clearDisplay();
         }
         else {
             // maybe i'll add something for multiply operators pressed
@@ -62,6 +63,12 @@ clear.addEventListener("click", e => {
 negative.addEventListener("click", e => {
     // changes sign on display
     let signDisplay = document.querySelector(".signDisplay");
+
+    // after operation clear
+    if (operatorPressed){
+        return;
+    }
+
     if (signDisplay.textContent === "") {
         signDisplay.textContent = "-";
     }
@@ -75,9 +82,27 @@ decimal.addEventListener("click", addDecimalToDisplay)
 
 
 // event listener functions
+function clearDisplay() {
+    displayValue = [""]
+    let signDisplay = document.querySelector(".signDisplay");
+    let displayNumbers = document.querySelectorAll(".numberDisplay");
+    displayNumbers = Array.from(displayNumbers);
+    signDisplay.textContent = "";
+    displayNumbers[0].textContent = "0";
+    for (let i = 1; i < displayNumbers.length; i++) {
+        displayNumbers[i].textContent = "";
+    }
+}
+
 function addNumberToDisplay(id) {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
+
+    // after operation clear
+    if (operatorPressed){
+        clearDisplay();
+        operatorPressed = false;
+    }
 
     // fresh display condition
     if (displayNumbers[0].textContent === "0") {
@@ -102,21 +127,15 @@ function addNumberToDisplay(id) {
     return console.log(displayValue.join(""))
 }
 
-function clearDisplay() {
-    displayValue = [""]
-    let signDisplay = document.querySelector(".signDisplay");
-    let displayNumbers = document.querySelectorAll(".numberDisplay");
-    displayNumbers = Array.from(displayNumbers);
-    signDisplay.textContent = "";
-    displayNumbers[0].textContent = "0";
-    for (let i = 1; i < displayNumbers.length; i++) {
-        displayNumbers[i].textContent = "";
-    }
-}
-
 function addDecimalToDisplay() {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
+
+    // after operation clear
+    if (operatorPressed){
+        clearDisplay();
+        operatorPressed = false;
+    }
 
     // when numbers are already on display
     for (let i = 0; i < displayNumbers.length; i++) {
