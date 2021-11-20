@@ -56,7 +56,12 @@ function addNumberToDisplay(id) {
 
     // fresh display condition
     if (displayNumbers[0].textContent === "0") {
-        return;
+        if (id == 0) {
+            return;
+        }
+        displayNumbers[0].textContent = `${id}`;
+        displayValue.push(displayNumbers[0].textContent)
+        return console.log(displayValue.join(""));
     }
 
     for (let i = 1; i < displayNumbers.length; i++) {
