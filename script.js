@@ -57,7 +57,13 @@ decimal.addEventListener("click", addDecimalToDisplay)
 function addNumberToDisplay(id) {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
-    for (let i = 0; i < displayNumbers.length; i++) {
+
+    // fresh display condition
+    if (displayNumbers[0].textContent === "0") {
+        return;
+    }
+
+    for (let i = 1; i < displayNumbers.length; i++) {
         if (displayNumbers[i].textContent !== "") {
             continue;
         }
@@ -73,11 +79,6 @@ function addNumberToDisplay(id) {
 function addDecimalToDisplay() {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
-
-    // fresh display condition
-    if (displayNumbers[0].textContent === "") {
-        return;
-    }
 
     // when numbers are already on display
     for (let i = 0; i < displayNumbers.length; i++) {
