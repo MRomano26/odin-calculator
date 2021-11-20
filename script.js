@@ -1,22 +1,3 @@
-function makeOperation(a, operator) {
-    if (operator === "+") {
-        return b => a + b;
-    }
-    else if (operator === "-") {
-        return b => a - b;
-    }
-    else if (operator === "*") {
-        return b => a * b;
-    }
-    else if (operator === "/") {
-        return b => a / b;
-    }
-    else {
-        return;
-    }
-}
-
-
 // button elements
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator")
@@ -26,6 +7,7 @@ const backspace = document.querySelector("#BACK")
 const negative = document.querySelector("#NEG");
 const decimal = document.querySelector("#DECI");
 
+// global variables
 let displayValue = [""];
 let operation = null;
 let operatorPressed = false;
@@ -60,37 +42,27 @@ clear.addEventListener("click", e => {
     clearDisplay();
 })
 
-negative.addEventListener("click", e => {
-    // changes sign on display
-    let signDisplay = document.querySelector(".signDisplay");
-
-    // after operation clear
-    if (operatorPressed){
-        return;
-    }
-
-    if (signDisplay.textContent === "") {
-        signDisplay.textContent = "-";
-    }
-    else {
-        signDisplay.textContent = "";
-    }
-    return displayValue[0] = signDisplay.textContent;
-})
+negative.addEventListener("click", changeSign)
 
 decimal.addEventListener("click", addDecimalToDisplay)
 
 
 // event listener functions
-function clearDisplay() {
-    displayValue = [""]
-    let signDisplay = document.querySelector(".signDisplay");
-    let displayNumbers = document.querySelectorAll(".numberDisplay");
-    displayNumbers = Array.from(displayNumbers);
-    signDisplay.textContent = "";
-    displayNumbers[0].textContent = "0";
-    for (let i = 1; i < displayNumbers.length; i++) {
-        displayNumbers[i].textContent = "";
+function makeOperation(a, operator) {
+    if (operator === "+") {
+        return b => a + b;
+    }
+    else if (operator === "-") {
+        return b => a - b;
+    }
+    else if (operator === "*") {
+        return b => a * b;
+    }
+    else if (operator === "/") {
+        return b => a / b;
+    }
+    else {
+        return;
     }
 }
 
@@ -125,6 +97,36 @@ function addNumberToDisplay(id) {
         }
     }
     return console.log(displayValue.join(""))
+}
+
+function clearDisplay() {
+    displayValue = [""]
+    let signDisplay = document.querySelector(".signDisplay");
+    let displayNumbers = document.querySelectorAll(".numberDisplay");
+    displayNumbers = Array.from(displayNumbers);
+    signDisplay.textContent = "";
+    displayNumbers[0].textContent = "0";
+    for (let i = 1; i < displayNumbers.length; i++) {
+        displayNumbers[i].textContent = "";
+    }
+}
+
+function changeSign() {
+    // changes sign on display
+    let signDisplay = document.querySelector(".signDisplay");
+
+    // after operation clear
+    if (operatorPressed){
+        return;
+    }
+
+    if (signDisplay.textContent === "") {
+        signDisplay.textContent = "-";
+    }
+    else {
+        signDisplay.textContent = "";
+    }
+    return displayValue[0] = signDisplay.textContent;
 }
 
 function addDecimalToDisplay() {
