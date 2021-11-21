@@ -5,8 +5,8 @@ const clearEntry = document.querySelector("#CE")
 const clear = document.querySelector("#C")
 const backspace = document.querySelector("#BACK")
 const negative = document.querySelector("#NEG");
-const decimal = document.querySelector("#DECI");
-const equal = document.querySelector("#EQUA");
+const decimal = document.querySelector("#De");
+const equal = document.querySelector("#En");
 
 // global variables
 let displayValue = [""];
@@ -15,11 +15,40 @@ let operatorPressed = false;
 
 
 // event listeners
+document.addEventListener("keydown", e => {
+    console.log(e.code);
+    if (e.code === "Delete") {
+        clearEntry.click();
+    }
+    else if (e.code === "Escape") {
+        clear.click();
+    }
+    else if (e.code === "Backspace") {
+        backspace.click();
+    }
+    else if (e.code === "F9") {
+        negative.click();
+    }
+    else if (e.code.includes("Numpad")) {
+        if (e.code.length === 7) {
+            document.querySelector(`#N${e.code.substr(6)}`).click();
+        }
+        else {
+            document.querySelector(`#${e.code.substr(6, 2)}`).click();
+        }
+    }
+    else {
+        // normal for other buttons
+        return;
+    }
+    e.preventDefault();
+})
+
 numbers.forEach((number) => {
-    let id = number.id;
+    let id = number.id[1];
     number.addEventListener("click", e => {
         addNumberToDisplay(id);
-    })
+    });
 })
 
 operators.forEach(operator => {
@@ -52,16 +81,16 @@ equal.addEventListener("click", equalOperator);
 
 // event listener functions
 function makeOperation(a, operator) {
-    if (operator === "+") {
+    if (operator === "Ad") {
         return b => a + b;
     }
-    else if (operator === "-") {
+    else if (operator === "Su") {
         return b => a - b;
     }
-    else if (operator === "*") {
+    else if (operator === "Mu") {
         return b => a * b;
     }
-    else if (operator === "/") {
+    else if (operator === "Di") {
         return b => a / b;
     }
     else {
