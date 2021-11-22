@@ -12,11 +12,14 @@ const equal = document.querySelector("#En");
 let displayValue = [""];
 let operation = null;
 let operatorPressed = false;
+let equalsPressed = false;
+let currentOperator = null;
+let currentSecondNumber = null;
 
 
 // event listeners
 document.addEventListener("keydown", e => {
-    console.log(e.code);
+    // keyboard shortcuts
     if (e.code === "Delete") {
         clearEntry.click();
     }
@@ -53,6 +56,8 @@ numbers.forEach((number) => {
 
 operators.forEach(operator => {
     let id = operator.id;
+    equalsPressed = false;
+    currentSecondNumber = null;
     operator.addEventListener("click", e => {
         if (operation === null) {
             operatorPressed = true;
@@ -82,15 +87,19 @@ equal.addEventListener("click", equalOperator);
 // event listener functions
 function makeOperation(a, operator) {
     if (operator === "Ad") {
+        currentOperator = "Ad";
         return b => a + b;
     }
     else if (operator === "Su") {
+        currentOperator = "Su";
         return b => a - b;
     }
     else if (operator === "Mu") {
+        currentOperator = "Mu";
         return b => a * b;
     }
     else if (operator === "Di") {
+        currentOperator = "Di";
         return b => a / b;
     }
     else {
@@ -102,12 +111,19 @@ function equalOperator() {
     let displayNumbers = document.querySelectorAll(".numberDisplay");
     displayNumbers = Array.from(displayNumbers);
     let signDisplay = document.querySelector(".signDisplay");
+    let secondNumber = Number(displayValue.join(""));
 
-    if (operation === null || operatorPressed) {
-        // should only work when there is a second value
+    if (currentSecondNumber === null) {
+        currentSecondNumber = secondNumber;
+    }
+    else if (equalsPressed) {
+        secondNumber = currentSecondNumber;
+    }
+    else if (operation === null || operatorPressed) {
+        // should only work when there is an operation
         return;
     }
-    let secondNumber = Number(displayValue.join(""));
+    
     let result = operation(secondNumber);
     clearDisplay();
 
@@ -116,13 +132,14 @@ function equalOperator() {
     }
     else if (!Number.isFinite(result)) {
         displayNumbers[0].textContent = "Don't divide by zero!";
-        operatorPressed = true;
     }
     else {
         let resultArray = result.toString().split("")
         if (resultArray.length > displayNumbers.length) {
             // too big
-            console.log("too big")
+            console.log(resultArray);
+            console.log()
+            console.log("too big");
         }
         else {
             if (resultArray[0] === "-") {
@@ -133,10 +150,11 @@ function equalOperator() {
                 displayNumbers[i].textContent = resultArray[i];
                 displayValue.push(resultArray[i]);
             }
-            operation = null;
-            operatorPressed = true;
         }
     }
+    operation = makeOperation(result, currentOperator);
+    operatorPressed = true;
+    equalsPressed = true;
 }
 
 function addNumberToDisplay(id) {
@@ -147,6 +165,8 @@ function addNumberToDisplay(id) {
     if (operatorPressed){
         clearDisplay();
         operatorPressed = false;
+        equalsPressed = false;
+        currentSecondNumber = null;
     }
 
     // fresh display condition
@@ -208,8 +228,7 @@ function addDecimalToDisplay() {
 
     // after operation clear
     if (operatorPressed){
-        clearDisplay();
-        operatorPressed = false;
+        return;
     }
 
     // when numbers are already on display
