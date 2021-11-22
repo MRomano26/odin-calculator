@@ -56,15 +56,16 @@ numbers.forEach((number) => {
 
 operators.forEach(operator => {
     let id = operator.id;
-    equalsPressed = false;
-    currentSecondNumber = null;
     operator.addEventListener("click", e => {
+        equalsPressed = false;
+        currentSecondNumber = null;
         if (operation === null) {
             operatorPressed = true;
             operation = makeOperation(Number(displayValue.join("")), id);
         }
         else {
-            // maybe i'll add something for multiple operators pressed
+            equalOperator(Number(displayValue.join("")));
+            operation = makeOperation(Number(displayValue.join("")), id);
             return;
         }
     })
@@ -123,6 +124,9 @@ function equalOperator() {
         // should only work when there is an operation
         return;
     }
+    else {
+        currentSecondNumber = null;
+    }
     
     let result = operation(secondNumber);
     clearDisplay();
@@ -166,7 +170,6 @@ function addNumberToDisplay(id) {
         clearDisplay();
         operatorPressed = false;
         equalsPressed = false;
-        currentSecondNumber = null;
     }
 
     // fresh display condition
