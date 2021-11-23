@@ -2,11 +2,22 @@
     box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .container {
+    height: 340px;
+    width: 240px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: darkgray;
+    border: 1px solid black;
+    border-radius: 16px;
 }
 
 .display {
