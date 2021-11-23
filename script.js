@@ -81,6 +81,8 @@ decimal.addEventListener("click", addDecimalToDisplay);
 
 equal.addEventListener("click", equalOperator);
 
+backspace.addEventListener("click", undo);
+
 
 // event listener functions
 function makeOperation(a, operator) {
@@ -293,9 +295,17 @@ function addDecimalToDisplay() {
     if (operatorPressed){
         return;
     }
-
+    if (displayValue.length === 1) {
+        displayNumbers[0].textContent = "0.";
+        return displayValue.push("0.");
+    }
+    else if (displayValue[1].includes("0.")){
+        displayNumbers[0].textContent = "0";
+        return displayValue = [""];
+    }
+    
     // when numbers are already on display
-    for (let i = 0; i < displayNumbers.length; i++) {
+    for (let i = 1; i < displayNumbers.length; i++) {
         if (displayNumbers[i].textContent !== "") {
             if (displayNumbers[i].textContent.includes(".")) {
                 if (displayNumbers[i + 1].textContent === "") {
@@ -318,6 +328,48 @@ function addDecimalToDisplay() {
             displayValue.pop();
             displayValue.push(lastNumber);
             return console.log(displayValue.join("")); 
+        }
+    }
+}
+
+function undo() {
+    let displayNumbers = document.querySelectorAll(".numberDisplay");
+    displayNumbers = Array.from(displayNumbers);
+
+    if (displayValue.length > 2) {
+        for (i = 1; i < displayNumbers.length; i++) {
+            if (displayNumbers[i].textContent === "") {
+                if (displayNumbers[i-1].textContent.includes(".")) {
+                    let lastNumber = displayNumbers[i-1].textContent
+                            .split("")[0];
+                    displayNumbers[i-1].textContent = lastNumber;
+                    displayValue.pop();
+                    return displayValue.push(lastNumber);
+                }
+                else {
+                    displayNumbers[i-1].textContent = "";
+                    return displayValue.pop();
+                }
+            }
+        }
+        displayNumbers[displayNumbers.length-1].textContent = "";
+        return displayValue.pop();
+    }
+    else {
+        if (displayNumbers[0].textContent.includes("0.")) {
+            let lastNumber = displayNumbers[0].textContent.split("")[0];
+            displayNumbers[0].textContent = lastNumber;
+            return displayValue.pop();
+        }
+        else if (displayNumbers[0].textContent.includes(".")) {
+            let lastNumber = displayNumbers[0].textContent.split("")[0];
+            displayNumbers[0].textContent = lastNumber;
+            displayValue.pop();
+            return displayValue.push(lastNumber);
+        }
+        else {
+            displayNumbers[0].textContent = "0";
+            return displayValue = [""];
         }
     }
 }
