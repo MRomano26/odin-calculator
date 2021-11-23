@@ -57,16 +57,13 @@ numbers.forEach((number) => {
 operators.forEach(operator => {
     let id = operator.id;
     operator.addEventListener("click", e => {
-        equalsPressed = false;
         currentSecondNumber = null;
-        if (operation === null) {
-            operatorPressed = true;
-            operation = makeOperation(Number(displayValue.join("")), id);
+        if (operatorPressed) {
+            return;
         }
         else {
-            equalOperator(Number(displayValue.join("")));
+            operatorPressed = true;
             operation = makeOperation(Number(displayValue.join("")), id);
-            return;
         }
     })
 })
@@ -114,14 +111,19 @@ function equalOperator() {
     let signDisplay = document.querySelector(".signDisplay");
     let secondNumber = Number(displayValue.join(""));
 
-    if (currentSecondNumber === null) {
+    if (operation === null) {
+        // should only work when there is an operation
+        return;
+    }
+    else if (currentSecondNumber === null) {
         currentSecondNumber = secondNumber;
     }
     else if (equalsPressed) {
+        // allows repeat operations
         secondNumber = currentSecondNumber;
     }
-    else if (operation === null || operatorPressed) {
-        // should only work when there is an operation
+    else if (operatorPressed) {
+        // shouldn't work if operator pressed with no second number
         return;
     }
     else {
@@ -139,24 +141,82 @@ function equalOperator() {
     }
     else {
         let resultArray = result.toString().split("")
-        if (resultArray.length > displayNumbers.length) {
-            // too big
-            console.log(resultArray);
-            console.log()
-            console.log("too big");
+
+        //account for sign and decimal in array
+        if (!resultArray.includes("-")) {
+            resultArray.unshift("");
+        }
+        if (!resultArray.includes(".")) {
+            resultArray.push("");
+        }
+
+        //too big for display condition
+        if (resultArray.length > (displayNumbers.length + 2)) {
+            if (resultArray.includes(".")) {
+                let resultHalved = result.toString().split(".");
+                resultHalved[0] = resultHalved[0].split("");
+                if (!resultHalved[0].includes("-")) {
+                    resultHalved[0].unshift("");
+                }
+                if (resultHalved[0].length > (displayNumbers.length + 1)) {
+                    displayNumbers[0].textContent = "Too big to display!";
+                    operatorPressed = true;
+                    equalsPressed = true;
+                    return;
+                }
+                else if (resultHalved[0].length === (displayNumbers.length+1)) {
+                    result = Math.round(result);
+                }
+                else if (resultHalved[0].length < (displayNumbers.length+1)) {
+                    let digitsToRound = (displayNumbers.length+1)
+                             - resultHalved[0].length;
+                    result = Math.round(result*digitsToRound*10)/
+                            (digitsToRound*10);
+                }
+                resultArray = result.toString().split("");
+
+                //code that displays the number properly
+                if (resultArray.includes("-")) {
+                    signDisplay.textContent = resultArray.shift();
+                    displayValue[0] = signDisplay.textContent;
+                }
+                if (resultArray.includes(".")) {
+                    let index = resultArray.indexOf(".");
+                    resultArray[index - 1] += "."
+                    resultArray.splice(index, 1);
+                }
+                for (let i = 0; i < displayNumbers.length; i++) {
+                    displayNumbers[i].textContent = resultArray[i];
+                    displayValue.push(resultArray[i]);
+                }
+                operation = makeOperation(result, currentOperator);
+            }
+            else {
+                displayNumbers[0].textContent = "Too big to display!";
+                    operatorPressed = true;
+                    equalsPressed = true;
+                    return;
+            }
         }
         else {
-            if (resultArray[0] === "-") {
-                signDisplay.textContent = resultArray.shift();
-                displayValue[0] = "-";
+            //code that displays the number properly
+            signDisplay.textContent = resultArray.shift();
+            displayValue[0] = signDisplay.textContent;
+            if (resultArray.includes(".")) {
+                let index = resultArray.indexOf(".");
+                resultArray[index - 1] += "."
+                resultArray.splice(index, 1);
+            }
+            else {
+                resultArray.pop();
             }
             for (let i = 0; i < displayNumbers.length; i++) {
                 displayNumbers[i].textContent = resultArray[i];
                 displayValue.push(resultArray[i]);
             }
+            operation = makeOperation(result, currentOperator);
         }
     }
-    operation = makeOperation(result, currentOperator);
     operatorPressed = true;
     equalsPressed = true;
 }
