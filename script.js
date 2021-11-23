@@ -172,13 +172,6 @@ function equalOperator() {
                 else if (resultHalved[0].length < (displayNumbers.length+1)) {
                     let digitsToRound = (displayNumbers.length+1)
                              - resultHalved[0].length;
-                    if (digitsToRound >= 8) {
-                        // too small for display 
-                        displayNumbers[0].textContent = "Too small to display!";
-                        operatorPressed = true;
-                        equalsPressed = true;
-                        return displayValue = [""];
-                    }
                     result = Math.round(result*digitsToRound*10)/
                             (digitsToRound*10);
                 }
